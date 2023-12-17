@@ -38,7 +38,7 @@ namespace CarvedRockFitnessApi.Services
             return revenueInCurrencyList;
         }
 
-        private static Dictionary<Currency, decimal> GetOrderValueByCurrency(IEnumerable<Order> orders)
+        private static Dictionary<Currency, decimal> BucketGetOrderValueByCurrency(IEnumerable<Order> orders)
         {
             var orderValueByCurrency = new Dictionary<Currency, decimal>();
 
