@@ -2,6 +2,7 @@
 using CarvedRockFitnessApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CarvedRockFitnessApi.Services
 {
@@ -35,7 +36,27 @@ namespace CarvedRockFitnessApi.Services
 
             return revenueInCurrencyList;
         }
+        public IEnumerable<RevenueInCurrency> GetRevenueByCurrencyOrdered()
+        {
+            var orders = this.orderRepository.GetOrdersPlacedToday();
+            var orderValueByCurrency = BucketOrderValueByCurrency(orders);
 
+            var revenueInCurrencyList = new List<RevenueInCurrency>();
+            foreach (Currency currency in Enum.GetValues(typeof(Currency)))
+            {
+                var currencyOrderValue = 0m;
+
+                if (orderValueByCurrency.ContainsKey(currency))
+                {
+                    currencyOrderValue = orderValueByCurrency[currency];
+                }
+
+                revenueInCurrencyList.Add(new RevenueInCurrency(currency, currencyOrderValue));
+
+            }
+
+            return revenueInCurrencyList.OrderByDescending(keySelector: currencyRevenue => currencyRevenue.Revenue);
+        }
         private static Dictionary<Currency, decimal> BucketOrderValueByCurrency(IEnumerable<Order> orders)
         {
             var orderValueByCurrency = new Dictionary<Currency, decimal>();
