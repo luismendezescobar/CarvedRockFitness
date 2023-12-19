@@ -84,7 +84,7 @@ namespace CarvedRockFitnessApi.UnitTest
         {
             var random = new Random();
             var diceRole = random.Next(1, 7);
-            Assert.Greater(diceRole, 1);
+            Assert.Greater(diceRole, 0);
         }
     }
 }
